@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" type="text/css" href="static/styles.css">
+    <title>Sudoku</title>
+</head>
+<body>
+    <script src="static/scripts.js"></script>
+    <div id="content">
+        <div id="header">
+            <input id="playerName" type="text" placeholder="Введите имя" value="Игрок"/>
+            <input type="button" value="Начать игру" onclick="connect()"/>
+            <input type="button" value="Рейтинги" onclick="showTop()"/>
+        </div>
+        <div id="battlefield" class="battlefield">
+            <div class="row">
+                <div class="square">
+                    <div class="row">
+                        <div class="small" id="cell_1_1"><input id="in_1_1" type="text" oninput="inputDigit(this)"><span id="out_1_1" onclick="reInputDigit(this)"></span></div>
+                        <div class="small" id="cell_1_2"><input id="in_1_2" type="text" oninput="inputDigit(this)"><span id="out_1_2" onclick="reInputDigit(this)"></span></div>
+                        <div class="small" id="cell_1_3"><input id="in_1_3" type="text" oninput="inputDigit(this)"><span id="out_1_3" onclick="reInputDigit(this)"></span></div>
+                    </div>
+                    <div class="row">
+                        <div class="small" id="cell_2_1"><input id="in_2_1" type="text" oninput="inputDigit(this)"><span id="out_2_1" onclick="reInputDigit(this)"></span></div>
+                        <div class="small" id="cell_2_2"><input id="in_2_2" type="text" oninput="inputDigit(this)"><span id="out_2_2" onclick="reInputDigit(this)"></span></div>
+                        <div class="small" id="cell_2_3"><input id="in_2_3" type="text" oninput="inputDigit(this)"><span id="out_2_3" onclick="reInputDigit(this)"></span></div>
+                    </div>
+                    <div class="row">
+                        <div class="small" id="cell_3_1"><input id="in_3_1" type="text" oninput="inputDigit(this)"><span id="out_3_1" onclick="reInputDigit(this)"></span></div>
+                        <div class="small" id="cell_3_2"><input id="in_3_2" type="text" oninput="inputDigit(this)"><span id="out_3_2" onclick="reInputDigit(this)"></span></div>
+                        <div class="small" id="cell_3_3"><input id="in_3_3" type="text" oninput="inputDigit(this)"><span id="out_3_3" onclick="reInputDigit(this)"></span></div>
+                    </div>
+                </div>
+                <div class="square">
+                    <div class="row">
+                        <div class="small" id="cell_1_4"><input id="in_1_4" type="text" oninput="inputDigit(this)"><span id="out_1_4" onclick="reInputDigit(this)"></span></div>
+                        <div class="small" id="cell_1_5"><input id="in_1_5" type="text" oninput="inputDigit(this)"><span id="out_1_5" onclick="reInputDigit(this)"></span></div>
+                        <div class="small" id="cell_1_6"><input id="in_1_6" type="text" oninput="inputDigit(this)"><span id="out_1_6" onclick="reInputDigit(this)"></span></div>
+                    </div>
+                    <div class="row">
+                        <div class="small" id="cell_2_4"><input id="in_2_4" type="text" oninput="inputDigit(this)"><span id="out_2_4" onclick="reInputDigit(this)"></span></div>
+                        <div class="small" id="cell_2_5"><input id="in_2_5" type="text" oninput="inputDigit(this)"><span id="out_2_5" onclick="reInputDigit(this)"></span></div>
+                        <div class="small" id="cell_2_6"><input id="in_2_6" type="text" oninput="inputDigit(this)"><span id="out_2_6" onclick="reInputDigit(this)"></span></div>
+                    </div>
+                    <div class="row">
+                        <div class="small" id="cell_3_4"><input id="in_3_4" type="text" oninput="inputDigit(this)"><span id="out_3_4" onclick="reInputDigit(this)"></span></div>
+                        <div class="small" id="cell_3_5"><input id="in_3_5" type="text" oninput="inputDigit(this)"><span id="out_3_5" onclick="reInputDigit(this)"></span></div>
+                        <div class="small" id="cell_3_6"><input id="in_3_6" type="text" oninput="inputDigit(this)"><span id="out_3_6" onclick="reInputDigit(this)"></span></div>
+                    </div>
+                </div>
+                <div class="square">
+                    <div class="row">
+                        <div class="small" id="cell_1_7"><input id="in_1_7" type="text" oninput="inputDigit(this)"><span id="out_1_7" onclick="reInputDigit(this)"></span></div>
+                        <div class="small" id="cell_1_8"><input id="in_1_8" type="text" oninput="inputDigit(this)"><span id="out_1_8" onclick="reInputDigit(this)"></span></div>
+                        <div class="small" id="cell_1_9"><input id="in_1_9" type="text" oninput="inputDigit(this)"><span id="out_1_9" onclick="reInputDigit(this)"></span></div>
+                    </div>
+                    <div class="row">
+                        <div class="small" id="cell_2_7"><input id="in_2_7" type="text" oninput="inputDigit(this)"><span id="out_2_7" onclick="reInputDigit(this)"></span></div>
+                        <div class="small" id="cell_2_8"><input id="in_2_8" type="text" oninput="inputDigit(this)"><span id="out_2_8" onclick="reInputDigit(this)"></span></div>
+                        <div class="small" id="cell_2_9"><input id="in_2_9" type="text" oninput="inputDigit(this)"><span id="out_2_9" onclick="reInputDigit(this)"></span></div>
+                    </div>
+                    <div class="row">
+                        <div class="small" id="cell_3_7"><input id="in_3_7" type="text" oninput="inputDigit(this)"><span id="out_3_7" onclick="reInputDigit(this)"></span></div>
+                        <div class="small" id="cell_3_8"><input id="in_3_8" type="text" oninput="inputDigit(this)"><span id="out_3_8" onclick="reInputDigit(this)"></span></div>
+                        <div class="small" id="cell_3_9"><input id="in_3_9" type="text" oninput="inputDigit(this)"><span id="out_3_9" onclick="reInputDigit(this)"></span></div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="square">
+                    <div class="row">
+                        <div class="small" id="cell_4_1"><input id="in_4_1" type="text" oninput="inputDigit(this)"><span id="out_4_1" onclick="reInputDigit(this)"></span></div>
+                        <div class="small" id="cell_4_2"><input id="in_4_2" type="text" oninput="inputDigit(this)"><span id="out_4_2" onclick="reInputDigit(this)"></span></div>
+                        <div class="small" id="cell_4_3"><input id="in_4_3" type="text" oninput="inputDigit(this)"><span id="out_4_3" onclick="reInputDigit(this)"></span></div>
+                    </div>
+                    <div class="row">
+                        <div class="small" id="cell_5_1"><input id="in_5_1" type="text" oninput="inputDigit(this)"><span id="out_5_1" onclick="reInputDigit(this)"></span></div>
+                        <div class="small" id="cell_5_2"><input id="in_5_2" type="text" oninput="inputDigit(this)"><span id="out_5_2" onclick="reInputDigit(this)"></span></div>
+                        <div class="small" id="cell_5_3"><input id="in_5_3" type="text" oninput="inputDigit(this)"><span id="out_5_3" onclick="reInputDigit(this)"></span></div>
+                    </div>
+                    <div class="row">
+                        <div class="small" id="cell_6_1"><input id="in_6_1" type="text" oninput="inputDigit(this)"><span id="out_6_1" onclick="reInputDigit(this)"></span></div>
+                        <div class="small" id="cell_6_2"><input id="in_6_2" type="text" oninput="inputDigit(this)"><span id="out_6_2" onclick="reInputDigit(this)"></span></div>
+                        <div class="small" id="cell_6_3"><input id="in_6_3" type="text" oninput="inputDigit(this)"><span id="out_6_3" onclick="reInputDigit(this)"></span></div>
+                    </div>
+                </div>
+                <div class="square">
+                    <div class="row">
+                        <div class="small" id="cell_4_4"><input id="in_4_4" type="text" oninput="inputDigit(this)"><span id="out_4_4" onclick="reInputDigit(this)"></span></div>
+                        <div class="small" id="cell_4_5"><input id="in_4_5" type="text" oninput="inputDigit(this)"><span id="out_4_5" onclick="reInputDigit(this)"></span></div>
+                        <div class="small" id="cell_4_6"><input id="in_4_6" type="text" oninput="inputDigit(this)"><span id="out_4_6" onclick="reInputDigit(this)"></span></div>
+                    </div>
+                    <div class="row">
+                        <div class="small" id="cell_5_4"><input id="in_5_4" type="text" oninput="inputDigit(this)"><span id="out_5_4" onclick="reInputDigit(this)"></span></div>
+                        <div class="small" id="cell_5_5"><input id="in_5_5" type="text" oninput="inputDigit(this)"><span id="out_5_5" onclick="reInputDigit(this)"></span></div>
+                        <div class="small" id="cell_5_6"><input id="in_5_6" type="text" oninput="inputDigit(this)"><span id="out_5_6" onclick="reInputDigit(this)"></span></div>
+                    </div>
+                    <div class="row">
+                        <div class="small" id="cell_6_4"><input id="in_6_4" type="text" oninput="inputDigit(this)"><span id="out_6_4" onclick="reInputDigit(this)"></span></div>
+                        <div class="small" id="cell_6_5"><input id="in_6_5" type="text" oninput="inputDigit(this)"><span id="out_6_5" onclick="reInputDigit(this)"></span></div>
+                        <div class="small" id="cell_6_6"><input id="in_6_6" type="text" oninput="inputDigit(this)"><span id="out_6_6" onclick="reInputDigit(this)"></span></div>
+                    </div>
+                </div>
+                <div class="square">
+                    <div class="row">
+                        <div class="small" id="cell_4_7"><input id="in_4_7" type="text" oninput="inputDigit(this)"><span id="out_4_7" onclick="reInputDigit(this)"></span></div>
+                        <div class="small" id="cell_4_8"><input id="in_4_8" type="text" oninput="inputDigit(this)"><span id="out_4_8" onclick="reInputDigit(this)"></span></div>
+                        <div class="small" id="cell_4_9"><input id="in_4_9" type="text" oninput="inputDigit(this)"><span id="out_4_9" onclick="reInputDigit(this)"></span></div>
+                    </div>
+                    <div class="row">
+                        <div class="small" id="cell_5_7"><input id="in_5_7" type="text" oninput="inputDigit(this)"><span id="out_5_7" onclick="reInputDigit(this)"></span></div>
+                        <div class="small" id="cell_5_8"><input id="in_5_8" type="text" oninput="inputDigit(this)"><span id="out_5_8" onclick="reInputDigit(this)"></span></div>
+                        <div class="small" id="cell_5_9"><input id="in_5_9" type="text" oninput="inputDigit(this)"><span id="out_5_9" onclick="reInputDigit(this)"></span></div>
+                    </div>
+                    <div class="row">
+                        <div class="small" id="cell_6_7"><input id="in_6_7" type="text" oninput="inputDigit(this)"><span id="out_6_7" onclick="reInputDigit(this)"></span></div>
+                        <div class="small" id="cell_6_8"><input id="in_6_8" type="text" oninput="inputDigit(this)"><span id="out_6_8" onclick="reInputDigit(this)"></span></div>
+                        <div class="small" id="cell_6_9"><input id="in_6_9" type="text" oninput="inputDigit(this)"><span id="out_6_9" onclick="reInputDigit(this)"></span></div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="square">
+                    <div class="row">
+                        <div class="small" id="cell_7_1"><input id="in_7_1" type="text" oninput="inputDigit(this)"><span id="out_7_1" onclick="reInputDigit(this)"></span></div>
+                        <div class="small" id="cell_7_2"><input id="in_7_2" type="text" oninput="inputDigit(this)"><span id="out_7_2" onclick="reInputDigit(this)"></span></div>
+                        <div class="small" id="cell_7_3"><input id="in_7_3" type="text" oninput="inputDigit(this)"><span id="out_7_3" onclick="reInputDigit(this)"></span></div>
+                    </div>
+                    <div class="row">
+                        <div class="small" id="cell_8_1"><input id="in_8_1" type="text" oninput="inputDigit(this)"><span id="out_8_1" onclick="reInputDigit(this)"></span></div>
+                        <div class="small" id="cell_8_2"><input id="in_8_2" type="text" oninput="inputDigit(this)"><span id="out_8_2" onclick="reInputDigit(this)"></span></div>
+                        <div class="small" id="cell_8_3"><input id="in_8_3" type="text" oninput="inputDigit(this)"><span id="out_8_3" onclick="reInputDigit(this)"></span></div>
+                    </div>
+                    <div class="row">
+                        <div class="small" id="cell_9_1"><input id="in_9_1" type="text" oninput="inputDigit(this)"><span id="out_9_1" onclick="reInputDigit(this)"></span></div>
+                        <div class="small" id="cell_9_2"><input id="in_9_2" type="text" oninput="inputDigit(this)"><span id="out_9_2" onclick="reInputDigit(this)"></span></div>
+                        <div class="small" id="cell_9_3"><input id="in_9_3" type="text" oninput="inputDigit(this)"><span id="out_9_3" onclick="reInputDigit(this)"></span></div>
+                    </div>
+                </div>
+                <div class="square">
+                    <div class="row">
+                        <div class="small" id="cell_7_4"><input id="in_7_4" type="text" oninput="inputDigit(this)"><span id="out_7_4" onclick="reInputDigit(this)"></span></div>
+                        <div class="small" id="cell_7_5"><input id="in_7_5" type="text" oninput="inputDigit(this)"><span id="out_7_5" onclick="reInputDigit(this)"></span></div>
+                        <div class="small" id="cell_7_6"><input id="in_7_6" type="text" oninput="inputDigit(this)"><span id="out_7_6" onclick="reInputDigit(this)"></span></div>
+                    </div>
+                    <div class="row">
+                        <div class="small" id="cell_8_4"><input id="in_8_4" type="text" oninput="inputDigit(this)"><span id="out_8_4" onclick="reInputDigit(this)"></span></div>
+                        <div class="small" id="cell_8_5"><input id="in_8_5" type="text" oninput="inputDigit(this)"><span id="out_8_5" onclick="reInputDigit(this)"></span></div>
+                        <div class="small" id="cell_8_6"><input id="in_8_6" type="text" oninput="inputDigit(this)"><span id="out_8_6" onclick="reInputDigit(this)"></span></div>
+                    </div>
+                    <div class="row">
+                        <div class="small" id="cell_9_4"><input id="in_9_4" type="text" oninput="inputDigit(this)"><span id="out_9_4" onclick="reInputDigit(this)"></span></div>
+                        <div class="small" id="cell_9_5"><input id="in_9_5" type="text" oninput="inputDigit(this)"><span id="out_9_5" onclick="reInputDigit(this)"></span></div>
+                        <div class="small" id="cell_9_6"><input id="in_9_6" type="text" oninput="inputDigit(this)"><span id="out_9_6" onclick="reInputDigit(this)"></span></div>
+                    </div>
+                </div>
+                <div class="square">
+                    <div class="row">
+                        <div class="small" id="cell_7_7"><input id="in_7_7" type="text" oninput="inputDigit(this)"><span id="out_7_7" onclick="reInputDigit(this)"></span></div>
+                        <div class="small" id="cell_7_8"><input id="in_7_8" type="text" oninput="inputDigit(this)"><span id="out_7_8" onclick="reInputDigit(this)"></span></div>
+                        <div class="small" id="cell_7_9"><input id="in_7_9" type="text" oninput="inputDigit(this)"><span id="out_7_9" onclick="reInputDigit(this)"></span></div>
+                    </div>
+                    <div class="row">
+                        <div class="small" id="cell_8_7"><input id="in_8_7" type="text" oninput="inputDigit(this)"><span id="out_8_7" onclick="reInputDigit(this)"></span></div>
+                        <div class="small" id="cell_8_8"><input id="in_8_8" type="text" oninput="inputDigit(this)"><span id="out_8_8" onclick="reInputDigit(this)"></span></div>
+                        <div class="small" id="cell_8_9"><input id="in_8_9" type="text" oninput="inputDigit(this)"><span id="out_8_9" onclick="reInputDigit(this)"></span></div>
+                    </div>
+                    <div class="row">
+                        <div class="small" id="cell_9_7"><input id="in_9_7" type="text" oninput="inputDigit(this)"><span id="out_9_7" onclick="reInputDigit(this)"></span></div>
+                        <div class="small" id="cell_9_8"><input id="in_9_8" type="text" oninput="inputDigit(this)"><span id="out_9_8" onclick="reInputDigit(this)"></span></div>
+                        <div class="small" id="cell_9_9"><input id="in_9_9" type="text" oninput="inputDigit(this)"><span id="out_9_9" onclick="reInputDigit(this)"></span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="footer"></div>
+    </div>
+</body>
+</html>

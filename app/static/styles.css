@@ -1,0 +1,63 @@
+#content {
+    margin: 50px;
+}
+
+#header {
+    padding: 20px 0px 20px 0px;
+}
+
+.battlefield {
+    border: solid 2px black;
+    width: max-content;
+}
+.square {
+    border: solid 1px black;
+    display: table-cell;
+}
+.row {
+    width: max-content;
+}
+.small {
+    border: solid 1px black;
+    display: table-cell;
+    width: 20px;
+    height: 20px;
+    margin: 2px;
+    padding: 2px;
+    text-align: center;
+    vertical-align: middle;
+}
+.small input {
+    width: 16px;
+    height: 13px;
+    text-align: center;
+}
+.player0 {
+}
+.player1 {
+    background-color: #BF00FF;
+}
+.player2 {
+    background-color: #7100FF;
+}
+.player3 {
+    background-color: #FFDC00;
+}
+.player4 {
+    background-color: #FFA500;
+}
+.player5 {
+    background-color: #FF6F00;
+}
+.player6 {
+    background-color: #FF4200
+}
+.player7 {
+    background-color: #FF0000
+}
+.player8 {
+    background-color: #FF006B
+}
+.player9 {
+    background-color: #FF0FA9;
+}
