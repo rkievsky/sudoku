@@ -4,4 +4,4 @@ require "autoload.php";
 
 use Classes\Application;
 
-Application::create()->run();
+Application::create()->setIsWeb(true)->run();

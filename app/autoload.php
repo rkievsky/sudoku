@@ -6,6 +6,9 @@
  * @param string      $class
  * @param string|null $file_extensions
  */
+
+use Classes\Application;
+
 spl_autoload_register(function (string $class, string $file_extensions = null) {
     if ($file_extensions === null) {
         $file_extensions = spl_autoload_extensions();
@@ -31,11 +34,11 @@ spl_autoload_register(function (string $class, string $file_extensions = null) {
 });
 
 /**
- * @return \Classes\Application
+ * @return Application
  */
 function app()
 {
-    return \Classes\Application::get();
+    return Application::get();
 }
 
 /**
@@ -43,7 +46,7 @@ function app()
  */
 function game()
 {
-    return \Classes\Application::get()->getGame();
+    return Application::get()->getGame();
 }
 
 /**

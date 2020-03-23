@@ -31,19 +31,15 @@
 //     }
 // });
 
-// connect();
+window.document.onload = function (event) {
+    connect();
+};
+
 
 // UI -------------------------------
 function inputDigit (elem) {
     if ((elem.value > '0' && elem.value <= '9') && elem.value.length === 1) {
-        if (sendDigit(elem.value)) {
-            elem.style.display = 'none';
-            elem.parentElement.lastElementChild.textContent = elem.value;
-            elem.parentElement.lastElementChild.style.display = 'inline';
-
-            var className = 'player' + window.sudoku.player;
-            elem.parentElement.classList.add(className);
-        }
+        sendDigit(elem.id, elem.value);
     } else {
         elem.value = '';
     }
@@ -67,15 +63,14 @@ function setEnemyDigit(rq) {
     cell.textContent = rq.value;
 }
 
-function makeRQ(number) {
-    var regexp = /(\d)_(\d)/;
-    var res = regexp.exec('zzz_1_2');
+function makeRQ(x, y, digit) {
     return {
-        "x": res[1],
-        "y": res[2],
+        "action": "setDigitOnField",
+        "x": x,
+        "y": y,
         "player": window.sudoku.player,
-        "id": window.sudoku.id,
-        "value": number
+        "gameId": window.sudoku.gameId,
+        "value": digit
     };
 }
 
@@ -85,22 +80,28 @@ function fillField(field) {
     }
 }
 
-function fillGameInfo(id, player, host, port) {
-    window.sudoku = {};
-    window.sudoku.id = id;
-    window.sudoku.player = player;
+function fillGameInfo(gameId, playerId, playerName, host, port) {
+    if (!('sudoku' in window)) {
+        window.sudoku = {};
+    }
+
+    window.sudoku.gameId = gameId;
+    window.sudoku.player = playerId;
+    window.sudoku.playerName = playerName;
     window.sudoku.host = host;
     window.sudoku.port = port;
 }
 
 // NET -------------------------
 function connect() {
+    console.log('connect');
+
     var nameEl = document.getElementById('playerName');
 
     var rq = new XMLHttpRequest();
     rq.open('POST', 'http://sudoku.local/connect', false);
 
-    rq.send(JSON.stringify({"name": nameEl.value}));
+    rq.send();
 
     if (rq.status !== 200) {
         alert('Не удалось начать игру. Обновите страницу, чтобы попробовать ещё раз');
@@ -110,12 +111,11 @@ function connect() {
 
     var rs = JSON.parse(rq.responseText);
 
-    fillField(rs.field);
-    fillGameInfo(rs.id, rs.player, rs.host, rs.port);
-    connectToGame();
+    fillGameInfo(rs.gameId, rs.player, nameEl.value, rs.host, rs.port);
+    connectWS();
 }
 
-function connectToGame() {
+function connectWS() {
     if ('ws' in window.sudoku) {
         console.log('Закрываем старое соединение');
 
@@ -124,11 +124,13 @@ function connectToGame() {
         console.log('Старое соединение закрыто');
     }
 
-    // var url = 'ws://' + window.sudoku.host + ':' + window.sudoku.port;
-    var url = 'ws://sudoku.local:8000';
+    var url = 'ws://' + window.sudoku.host + ':' + window.sudoku.port;
     window.sudoku.ws = new WebSocket(url);
-    window.sudoku.ws.onopen = function() {
-        console.log("Соединение установлено.");
+    window.sudoku.ws.onopen = function(event) {
+        window.sudoku.ws.send(JSON.stringify({
+            "action": "connectToGame",
+            "gameId": null,
+            "name": window.sudoku.playerName}));
     };
 
     window.sudoku.ws.onclose = function(event) {
@@ -150,15 +152,45 @@ function connectToGame() {
 }
 
 function processMessage(data) {
-    console.log(data);
+    var rs = JSON.parse(data);
+
+    switch (rs.action) {
+        case 'connectToGame':
+            connectedToGame(rs);
+            break;
+        case 'setDigitOnField':
+            digitAccepted(rs);
+            break;
+    }
 }
 
-function sendDigit(val) {
-    var rq = makeRQ(val);
+function connectedToGame(rs) {
+    fillGameInfo(rs.gameId, rs.player, rs.host, rs.port);
+    fillField(rs.field);
+}
 
-    console.log(rq);
+function sendDigit(id, val) {
+    var regexp = /(\d)_(\d)/;
+    var res = regexp.exec(id);
+    var rq = makeRQ(parseInt(res[1]), parseInt(res[2]), parseInt(val));
+
+    window.sudoku.ws.send(JSON.stringify(rq));
 
     return true;
+}
+
+function digitAccepted(rs) {
+    if (!rs.success) {
+        return;
+    }
+
+    var elem = document.getElementById('in_' + rs.field[0].x + '_' + rs.field[0].y);
+    elem.style.display = 'none';
+    elem.parentElement.lastElementChild.textContent = elem.value;
+    elem.parentElement.lastElementChild.style.display = 'inline';
+
+    var className = 'player' + window.sudoku.player;
+    elem.parentElement.classList.add(className);
 }
 
 // Other --------------------------

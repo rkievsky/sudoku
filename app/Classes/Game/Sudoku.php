@@ -58,21 +58,17 @@ class Sudoku
     public function __construct(string $id)
     {
         $this->gameId = $id;
+        $this->fillField($this->generateField());
     }
 
     /**
-     * @param Coords[] $coords
+     * @param array $coords
      */
     public function fillField(array $coords)
     {
         foreach ($coords as $mark) {
             $this->field[$mark['x']][$mark['y']] = new Cell($mark['x'], $mark['y'], $mark['value']);
         }
-    }
-
-    public function newGame()
-    {
-        $this->fillField($this->generateField());
     }
 
     /**
@@ -84,14 +80,13 @@ class Sudoku
         foreach ($this->field as $x => $row) {
             foreach ($row as $y => $cell) {
                 /** @var Cell $cell */
-
+                /** @var Player $player */
                 $player = $cell->getPlayer();
-
                 $result[] = [
                     'x'      => $cell->getX(),
                     'y'      => $cell->getY(),
                     'value'  => $cell->getValue(),
-                    'player' => $player ?? 0,
+                    'player' => $player ? $player->getId() : 0,
                 ];
             }
         }
@@ -102,5 +97,20 @@ class Sudoku
     public function isGameOver()
     {
 
+    }
+
+    public function setDigit(int $x, int $y, int $value, Player $player = null): bool
+    {
+        if (!(
+            empty($this->field[$x][$y])
+            || !$this->field[$x][$y]->getPlayer()
+            || ($player && $this->field[$x][$y]->getPlayer() === $player)
+        )) {
+            return false;
+        }
+
+        $this->field[$x][$y] = new Cell($x, $y, $value, $player);
+
+        return true;
     }
 }

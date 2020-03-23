@@ -28,11 +28,12 @@ class Cell
      * @param int $y
      * @param int $value
      */
-    public function __construct(int $x, int $y, int $value)
+    public function __construct(int $x, int $y, int $value, Player $player = null)
     {
         $this->x = $x;
         $this->y = $y;
         $this->value = $value;
+        $this->player = $player;
     }
 
     /**

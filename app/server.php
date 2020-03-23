@@ -4,4 +4,4 @@ require "autoload.php";
 
 use Classes\Server;
 
-Server::create()->run();
+(new Server())->run();

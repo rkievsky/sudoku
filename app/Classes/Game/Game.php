@@ -17,28 +17,16 @@ class Game
      * Game constructor.
      *
      * @param string $id
+     * @throws \Exceptions\BasicError
      */
-    public function __construct($id = null)
+    public function __construct()
     {
-        $newGame = false;
-        if (!$id) {
-            $id = getGUID();
-            $newGame = true;
-        }
-
-        $this->sudoku = new Sudoku($id);
-        $this->players = new Players($id);
-
-        if ($newGame) {
-            $this->sudoku->newGame();
-            $this->players->newGame();
-        } else {
-            $this->sudoku->loadGame();
-            $this->players->loadGame();
-        }
+        $this->id = getGUID();
+        $this->sudoku = new Sudoku($this->id);
+        $this->players = new Players($this->id);
     }
 
-    public function getId()
+    public function getId(): string
     {
         return $this->id;
     }

@@ -7,31 +7,24 @@ use Exceptions\ActionError;
 class ActionsFactory
 {
     /**
-     * Возвращет имя запрощенного действия
-     *
-     * @return string
-     */
-    private function getActionName(): string
-    {
-        return trim($_SERVER['REQUEST_URI'], '/');
-    }
-
-    /**
      * Создаёт классы действий
      *
      * @return IAction
      * @throws \Exceptions\BasicError
      */
-    public function create() : IAction
+    public function create(string $action) : IAction
     {
-        switch ($this->getActionName()) {
+        switch ($action) {
             case 'startNew':
                 return $this->createStartNewGame();
                 break;
             case 'connect':
+                return $this->createConnect();
+                break;
+            case 'connectToGame':
                 return $this->createConnectToGame();
                 break;
-            case 'setDigit':
+            case 'setDigitOnField':
                 return $this->createSetDigitOnField();
                 break;
             case 'showTop':
@@ -48,6 +41,14 @@ class ActionsFactory
     public function createStartNewGame(): StartNewGame
     {
         return new StartNewGame();
+    }
+
+    /**
+     * @return ConnectToGame
+     */
+    public function createConnect(): Connect
+    {
+        return new Connect();
     }
 
     /**

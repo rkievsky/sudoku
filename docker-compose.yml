@@ -17,8 +17,8 @@ services:
       - type: bind
         source: ./app
         target: /var/www/app
-    ports:
-      - "8000-8010:8000-8010"
+#    ports:
+#      - "8000-8010:8000-8010"
     networks:
       app-net:
         aliases: 

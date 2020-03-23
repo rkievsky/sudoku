@@ -18,15 +18,13 @@ class Players
      * Players constructor.
      *
      * @param string $id
+     * @throws \Exceptions\BasicError
      */
     public function __construct(string $id)
     {
         $this->gameId = $id;
-    }
-
-    public function newGame()
-    {
-
+        // добавим игрока-заглушку. От его имени будут расставлены первоначальный цифры
+        $this->addPlayer('Fake Player');
     }
 
     /**
@@ -46,21 +44,22 @@ class Players
 
         $player = new Player($name);
         $this->players[] = $player;
-        $player->setId(count($this->players));
+        $player->setId(count($this->players) - 1);
 
         return $player->getId();
     }
 
     /**
      * @param int $id
+     * @return Player
      * @throws \Exceptions\BasicError
      */
-    public function saveTurn($id)
+    public function getPlayer(int $id): Player
     {
-        if (!array_key_exists($id, $this->players)) {
+        if (!$id || !array_key_exists($id, $this->players)) {
             throw GameError::create(GameError::PLAYER_NOT_REGISTRED);
         }
 
-        $this->players[$id]->setLastTurn();
+        return $this->players[$id];
     }
 }

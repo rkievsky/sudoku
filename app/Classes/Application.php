@@ -6,6 +6,7 @@ use Actions\ActionsFactory;
 use Classes\Game\Game;
 use Exceptions\ActionError;
 use Exceptions\RequestError;
+use Responses\BasicRS;
 use Responses\ErrorRS;
 
 /**
@@ -13,27 +14,48 @@ use Responses\ErrorRS;
  *
  * Обеспечивает работу приложения
  */
-class Application extends BasicApplication
+class Application
 {
+    /** @var bool $isWeb */
+    private $isWeb = false;
+
     /** @var ActionsFactory $actionsFactory */
     private $actionsFactory = null;
 
-    /** @var \Actions\IAction $action */
-    private $action = null;
-
-    /** @var \Requests\BasicRQ $request */
-    private $request = null;
-
     /** @var Game $game  */
     private $game = null;
+
+    /** @var static */
+    private static $app;
+
+    /**
+     * Создаёт синглтон
+     *
+     * @return static
+     */
+    public static function create()
+    {
+        return self::$app = new static();
+    }
+
+    /**
+     * Возвращает синглтон
+     *
+     * @return static
+     */
+    public static function get()
+    {
+        return self::$app;
+    }
 
     /**
      * Отправляет ответ с информацией об ошибке
      *
      * @param \Throwable $error
-     * @return int
+     * @param $response
+     * @return int|string
      */
-    private function processError(\Throwable $error): int
+    public function processError(\Throwable $error, &$response)
     {
         $httpCode = 500;
         switch (get_class($error)) {
@@ -42,14 +64,13 @@ class Application extends BasicApplication
                 break;
             case RequestError::class:
                 $httpCode = 400;
+                break;
         }
 
-        $response = new ErrorRS();
+        $response = new ErrorRS('', $this->game->getId());
         $response->success = false;
         $response->errorCode = $error->getCode();
         $response->errorMessage = $error->getMessage();
-
-        echo json_encode($response);
 
         return $httpCode;
     }
@@ -60,6 +81,32 @@ class Application extends BasicApplication
     public function __construct()
     {
         $this->actionsFactory = new ActionsFactory();
+        if (!$this->isWeb()) {
+            $this->game = new Game();
+        }
+
+    }
+
+    /**
+     * @param string|null $action
+     * @param string|null $rawRQ
+     * @return BasicRS
+     * @throws \Exceptions\BasicError
+     */
+    public function processRQ(string $action = null, string $rawRQ = null): BasicRS
+    {
+        if (is_null($action)) {
+            $action = trim($_SERVER['REQUEST_URI'], '/');
+        }
+
+        if (is_null($rawRQ)) {
+            $rawRQ = file_get_contents('php://input');
+        }
+
+        $action = $this->actionsFactory->create($action);
+        $request = $action->makeRQ($rawRQ);
+
+        return $action->handle($request);
     }
 
     /** @inheritDoc */
@@ -69,21 +116,15 @@ class Application extends BasicApplication
         try {
             ob_start();
 
-            $this->action = $this->actionsFactory->create();
-            $this->request = $this->action->makeRQ();
+            $response = $this->processRQ();
 
-            if ($this->request->gameId) {
-                $this->game = new Game($this->request->gameId);
-            } else {
-                $this->game = new Game();
-            }
-
-            $response = $this->action->handle($this->request);
             echo json_encode($response);
         } catch (\Throwable $error) {
             ob_clean();
 
-            $httpCode = $this->processError($error);
+            $response = null;
+            $httpCode = $this->processError($error, $response);
+            echo json_encode($response);
         } finally {
             ob_flush();
             http_response_code($httpCode);
@@ -100,5 +141,23 @@ class Application extends BasicApplication
     public function getGame($id = null): Game
     {
         return $this->game;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isWeb(): bool
+    {
+        return $this->isWeb;
+    }
+
+    /**
+     * @param bool $isWeb
+     */
+    public function setIsWeb(bool $isWeb): self
+    {
+        $this->isWeb = $isWeb;
+
+        return $this;
     }
 }
