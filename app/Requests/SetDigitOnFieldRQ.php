@@ -2,8 +2,6 @@
 
 namespace Requests;
 
-use Exceptions\RequestError;
-
 class SetDigitOnFieldRQ extends BasicRQ
 {
     /** @var int $x  */
@@ -21,17 +19,13 @@ class SetDigitOnFieldRQ extends BasicRQ
     /**
      * @inheritDoc
      */
-    public function collect(string $raw = null): \stdClass
+    public function collect(\stdClass $raw = null): \stdClass
     {
-        try {
-            $json = parent::collect($raw);
-            $this->x = $json->x;
-            $this->y = $json->y;
-            $this->value = $json->value;
-            $this->player = $json->player;
-        } catch (\Throwable $error) {
-            throw RequestError::create(RequestError::CANT_COLLECT_REQUEST_DATA, null, $error);
-        }
+        $json = parent::collect($raw);
+        $this->x = $json->x;
+        $this->y = $json->y;
+        $this->value = $json->value;
+        $this->player = $json->player;
 
         return $json;
     }

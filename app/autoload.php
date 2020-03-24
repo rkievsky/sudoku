@@ -6,9 +6,6 @@
  * @param string      $class
  * @param string|null $file_extensions
  */
-
-use Classes\Application;
-
 spl_autoload_register(function (string $class, string $file_extensions = null) {
     if ($file_extensions === null) {
         $file_extensions = spl_autoload_extensions();
@@ -32,22 +29,6 @@ spl_autoload_register(function (string $class, string $file_extensions = null) {
         }
     }
 });
-
-/**
- * @return Application
- */
-function app()
-{
-    return Application::get();
-}
-
-/**
- * @return \classes\game\Game
- */
-function game()
-{
-    return Application::get()->getGame();
-}
 
 /**
  * Returns a GUIDv4 string

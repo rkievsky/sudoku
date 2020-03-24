@@ -124,7 +124,7 @@ function connectWS() {
         console.log('Старое соединение закрыто');
     }
 
-    var url = 'ws://' + window.sudoku.host + ':' + window.sudoku.port;
+    var url = 'ws://' + window.sudoku.host + ':' + window.sudoku.port + '?player=' + window.sudoku.playerName;
     window.sudoku.ws = new WebSocket(url);
     window.sudoku.ws.onopen = function(event) {
         window.sudoku.ws.send(JSON.stringify({
@@ -161,6 +161,8 @@ function processMessage(data) {
         case 'setDigitOnField':
             digitAccepted(rs);
             break;
+        default:
+            alert('ERROR: ' + JSON.stringify(rs))
     }
 }
 
@@ -181,16 +183,21 @@ function sendDigit(id, val) {
 
 function digitAccepted(rs) {
     if (!rs.success) {
+        console.log(rs);
         return;
     }
 
     var elem = document.getElementById('in_' + rs.field[0].x + '_' + rs.field[0].y);
     elem.style.display = 'none';
-    elem.parentElement.lastElementChild.textContent = elem.value;
+    elem.parentElement.lastElementChild.textContent = rs.field[0].value;
     elem.parentElement.lastElementChild.style.display = 'inline';
 
-    var className = 'player' + window.sudoku.player;
+    var className = 'player' + rs.field[0].player;
     elem.parentElement.classList.add(className);
+
+    if (rs.gameOver) {
+        alert('Игра закончена!');
+    }
 }
 
 // Other --------------------------

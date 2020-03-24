@@ -13,15 +13,19 @@ class BasicRQ
     public $action = null;
 
     /**
-     * @param string $raw
+     * @param \stdClass $raw
      *
      * @return BasicRQ
      * @throws \Exceptions\BasicError
      */
-    public static function create(string $raw = null): BasicRQ
+    final public static function create(\stdClass $raw = null): BasicRQ
     {
-        $rq = new static();
-        $rq->collect($raw);
+        try {
+            $rq = new static();
+            $rq->collect($raw);
+        } catch (\Throwable $error) {
+            throw RequestError::create(RequestError::CANT_COLLECT_REQUEST_DATA, null, $error);
+        }
 
         return $rq;
     }
@@ -33,13 +37,8 @@ class BasicRQ
      *
      * @throws \Exceptions\BasicError
      */
-    public function collect(string $raw = null): \stdClass
+    public function collect(\stdClass $raw = null): \stdClass
     {
-        if (is_null($raw)) {
-            return new \stdClass();
-        }
-
-        $raw = json_decode($raw);
         $this->gameId = $raw->gameId;
         $this->action = $raw->action;
 

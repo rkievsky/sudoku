@@ -1,7 +1,6 @@
 <?php
 
-require "autoload.php";
-
-use Classes\Application;
-
-Application::create()->setIsWeb(true)->run();
+echo '{
+    "host": "sudoku.local",
+    "port": 8000
+}';

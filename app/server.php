@@ -2,6 +2,6 @@
 
 require "autoload.php";
 
-use Classes\Server;
+use Classes\WebSocketServer;
 
-(new Server())->run();
+(new WebSocketServer())->run();

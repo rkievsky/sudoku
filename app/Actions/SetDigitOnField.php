@@ -7,22 +7,16 @@ use Requests\SetDigitOnFieldRQ;
 use Responses\BasicRS;
 use Responses\SetDigitOnFieldRS;
 
-class SetDigitOnField implements IAction
+class SetDigitOnField extends BasicAction
 {
-    /**
-     * @inheritDoc
-     */
-    public function makeRQ(string $raw = null): BasicRQ
-    {
-        return SetDigitOnFieldRQ::create($raw);
-    }
+    const PRIMITIVE = 'setDigitOnField';
 
     /**
      * @inheritDoc
      */
-    public function getPrimitive(): string
+    public function makeRQ(\stdClass $raw = null): BasicRQ
     {
-        return 'setDigitOnField';
+        return SetDigitOnFieldRQ::create($raw);
     }
 
     /**
@@ -33,15 +27,26 @@ class SetDigitOnField implements IAction
      */
     public function handle(BasicRQ $request): BasicRS
     {
-        $response = new SetDigitOnFieldRS($this->getPrimitive(), game()->getId());
+        $response = new SetDigitOnFieldRS($this->getPrimitive(), $this->server->game->getId());
 
-        if (game()->sudoku->setDigit($request->x, $request->y, $request->value, game()->players->getPlayer($request->player))) {
+        if ($this->server->game->sudoku->setDigit(
+            $request->x,
+            $request->y,
+            $request->value,
+            $this->server->game->players->getPlayer($request->player)
+        )) {
             $response->field = [[
                 'x'      => $request->x,
                 'y'      => $request->y,
                 'value'  => $request->value,
                 'player' => $request->player,
             ]];
+
+            if ($response->gameOver = $this->server->game->sudoku->isGameOver()) {
+                $this->server->game->players->saveWinner($request->player);
+            }
+
+            $this->server->setNeedToNotifyListeners(true);
         }
 
         return $response;

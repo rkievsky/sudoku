@@ -12,6 +12,9 @@ class Sudoku
     /** @var string $gameId  */
     public $gameId = null;
 
+    /** @var bool $gameOver */
+    public $gameOver = false;
+
     /**
      * @return array
      */
@@ -94,9 +97,61 @@ class Sudoku
         return $result;
     }
 
-    public function isGameOver()
+    public function isGameOver(): bool
     {
+        // проверим строки
+        for ($i = 1; $i <= self::SIZE; $i++) {
+            $digits = [];
+            for ($j = 1; $j <= self::SIZE; $j++) {
+                if (empty($this->field[$i][$j])) {
+                    return false;
+                }
 
+                $cell = $this->field[$i][$j];
+                $digits[$cell->getValue()] = ($digits[$cell->getValue()] ?? 0) + 1;
+            }
+            if (count($digits) !== 9) {
+                return false;
+            }
+        }
+
+        // проверим столбцы
+        for ($j = 1; $j <= self::SIZE; $j++) {
+            $digits = [];
+            for ($i = 1; $i <= self::SIZE; $i++) {
+                if (empty($this->field[$i][$j])) {
+                    return false;
+                }
+
+                $cell = $this->field[$i][$j];
+                $digits[$cell->getValue()] = ($digits[$cell->getValue()] ?? 0) + 1;
+            }
+            if (count($digits) !== 9) {
+                return false;
+            }
+        }
+
+        // проверим квадраты
+        for ($i = 1; $i <= self::SIZE; $i += 3) {
+            for ($j = 1; $j <= self::SIZE; $j += 3) {
+                $digits = [];
+                for ($ii = $i; $ii <= $i + 3; $ii++) {
+                    for ($jj = $j; $jj <= $j + 3; $jj++) {
+                        if (empty($this->field[$i][$j])) {
+                            return false;
+                        }
+
+                        $cell = $this->field[$ii][$jj];
+                        $digits[$cell->getValue()] = ($digits[$cell->getValue()] ?? 0) + 1;
+                    }
+                }
+                if (count($digits) !== 9) {
+                    return false;
+                }
+            }
+        }
+
+        return true;
     }
 
     public function setDigit(int $x, int $y, int $value, Player $player = null): bool

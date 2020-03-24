@@ -8,12 +8,14 @@ use Responses\BasicRS;
 use Requests\ConnectToGameRQ;
 use Responses\ConnectToGameRS;
 
-class ConnectToGame implements IAction
+class ConnectToGame extends BasicAction
 {
+    const PRIMITIVE = 'connectToGame';
+
     /**
      * @inheritDoc
      */
-    public function makeRQ(string $raw = null): BasicRQ
+    public function makeRQ(\stdClass $raw = null): BasicRQ
     {
         return ConnectToGameRQ::create($raw);
     }
@@ -25,21 +27,13 @@ class ConnectToGame implements IAction
      */
     public function handle(BasicRQ $request): BasicRS
     {
-        $response = new ConnectToGameRS($this->getPrimitive(), game()->getId());
+        $response = new ConnectToGameRS($this->getPrimitive(), $this->server->game->getId());
         $response->host = Server::HOST_NAME;
         $response->port = Server::MASTER_PORT;
 
-        $response->player = game()->players->addPlayer($request->name);
-        $response->field = game()->sudoku->getField();
+        $response->player = $this->server->game->players->addPlayer($request->name);
+        $response->field = $this->server->game->sudoku->getField();
 
         return $response;
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function getPrimitive(): string
-    {
-        return 'connectToGame';
     }
 }
