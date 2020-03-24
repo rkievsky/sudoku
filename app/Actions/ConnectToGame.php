@@ -27,12 +27,12 @@ class ConnectToGame extends BasicAction
      */
     public function handle(BasicRQ $request): BasicRS
     {
-        $response = new ConnectToGameRS($this->getPrimitive(), $this->server->game->getId());
+        $response = new ConnectToGameRS($this->getPrimitive(), $this->server->getGameId());
         $response->host = Server::HOST_NAME;
         $response->port = Server::MASTER_PORT;
 
-        $response->player = $this->server->game->players->addPlayer($request->name);
-        $response->field = $this->server->game->sudoku->getField();
+        $response->player = $this->server->players->addPlayer($request->name);
+        $response->field = $this->server->sudoku->getField();
 
         return $response;
     }

@@ -9,7 +9,7 @@ use Responses\ShowPlayersTopRS;
 
 class ShowPlayersTop extends BasicAction
 {
-
+    const PRIMITIVE = 'showTop';
     /**
      * @inheritDoc
      */
@@ -23,8 +23,8 @@ class ShowPlayersTop extends BasicAction
      */
     public function handle(BasicRQ $request): BasicRS
     {
-        $response = new ShowPlayersTopRS($this->getPrimitive(), $this->server->game->getId());
-        $response->content = $this->server->game->players->getWinners();
+        $response = new ShowPlayersTopRS($this->getPrimitive(), $this->server->getGameId());
+        $response->content = $this->server->players->getWinners();
 
         return $response;
     }

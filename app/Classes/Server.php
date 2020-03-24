@@ -3,7 +3,8 @@
 namespace Classes;
 
 use Actions\ActionsFactory;
-use Classes\Game\Game;
+use Classes\Game\Players;
+use Classes\Game\Sudoku;
 use Exceptions\ActionError;
 use Exceptions\RequestError;
 use Responses\BasicRS;
@@ -22,16 +23,27 @@ class Server
     /** @var bool $needToNotifyListeners */
     private $needToNotifyListeners = false;
 
-    /** @var Game $game  */
-    public $game = null;
+    /** @var string $gameId  */
+    private $gameId = null;
+
+    /** @var Sudoku $sudoku */
+    public $sudoku = null;
+
+    /** @var Players  */
+    public $players = null;
 
     /**
      * Application constructor.
+     *
+     * @throws \Exceptions\BasicError
      */
     public function __construct()
     {
         $this->actionsFactory = new ActionsFactory();
-        $this->game = new Game();
+
+        $this->gameId = getGUID();
+        $this->sudoku = new Sudoku($this->gameId);
+        $this->players = new Players($this->gameId);
     }
 
     /**
@@ -72,7 +84,7 @@ class Server
                 break;
         }
 
-        $response = new ErrorRS('error', $this->game->getId());
+        $response = new ErrorRS('error', $this->getGameId());
         $response->success = false;
         $response->errorCode = $error->getCode();
         $response->errorMessage = $error->getMessage();
@@ -91,5 +103,10 @@ class Server
         $this->needToNotifyListeners = false;
 
         return $current;
+    }
+
+    public function getGameId(): string
+    {
+        return $this->gameId;
     }
 }

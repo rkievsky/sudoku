@@ -27,13 +27,13 @@ class SetDigitOnField extends BasicAction
      */
     public function handle(BasicRQ $request): BasicRS
     {
-        $response = new SetDigitOnFieldRS($this->getPrimitive(), $this->server->game->getId());
+        $response = new SetDigitOnFieldRS($this->getPrimitive(), $this->server->getGameId());
 
-        if ($this->server->game->sudoku->setDigit(
+        if ($this->server->sudoku->setDigit(
             $request->x,
             $request->y,
             $request->value,
-            $this->server->game->players->getPlayer($request->player)
+            $this->server->players->getPlayer($request->player)
         )) {
             $response->field = [[
                 'x'      => $request->x,
@@ -42,8 +42,8 @@ class SetDigitOnField extends BasicAction
                 'player' => $request->player,
             ]];
 
-            if ($response->gameOver = $this->server->game->sudoku->isGameOver()) {
-                $this->server->game->players->saveWinner($request->player);
+            if ($response->gameOver = $this->server->sudoku->isGameOver()) {
+                $this->server->players->saveWinner($request->player);
             }
 
             $this->server->setNeedToNotifyListeners(true);

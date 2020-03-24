@@ -354,7 +354,7 @@ class WebSocketServer
         foreach ($this->listeners as $playerName => $listenerSocket) {
             if ($listenerSocket === $socket) {
                 unset($this->listeners[$playerName]);
-                $this->server->game->players->delPlayer($playerName);
+                $this->server->players->delPlayer($playerName);
                 break;
             }
         }

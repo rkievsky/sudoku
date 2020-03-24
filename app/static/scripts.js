@@ -161,6 +161,9 @@ function processMessage(data) {
         case 'setDigitOnField':
             digitAccepted(rs);
             break;
+        case 'showTop':
+            alert(rs.content);
+            break;
         default:
             alert('ERROR: ' + JSON.stringify(rs))
     }
@@ -202,5 +205,9 @@ function digitAccepted(rs) {
 
 // Other --------------------------
 function showTop() {
-    // todo открыть в новой вкладке топ игроков
+    window.sudoku.ws.send(JSON.stringify({
+        "action": "showTop",
+        "player": window.sudoku.player,
+        "gameId": window.sudoku.gameId
+    }));
 }
